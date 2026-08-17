@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle, Clock3, MapPin, Share2, Send, Verified, Map, BadgeCheck, Wallet } from "lucide-react";
 
 const jobs = [
@@ -77,7 +77,13 @@ export default function JobDetailsPage() {
 
   const job = useMemo(() => {
     const decoded = decodeURIComponent(params.title ?? "");
-    return jobs.find((entry) => entry.title === decoded) ?? jobs[0];
+    const match = jobs.find((entry) => entry.title === decoded);
+
+    if (!match) {
+      notFound();
+    }
+
+    return match;
   }, [params.title]);
 
   const handleApply = () => {
